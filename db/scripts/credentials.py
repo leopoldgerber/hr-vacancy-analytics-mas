@@ -6,7 +6,7 @@ local_user = "myuser"
 local_pass = "mypassword"
 local_host = "localhost"
 local_port = 5432
-local_name = "mydatabase"
+local_db = "mydatabase"
 
 
 def build_connection_url(
@@ -29,6 +29,6 @@ DB_URL = {
         os.getenv("POSTGRES_PASSWORD", local_pass),
         os.getenv("POSTGRES_HOST", local_host),
         os.getenv("POSTGRES_PORT", local_port),
-        os.getenv("POSTGRES_NAME", local_name)
+        os.getenv("POSTGRES_DB", local_db)
     ),
 }

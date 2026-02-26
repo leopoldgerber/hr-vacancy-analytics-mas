@@ -1,3 +1,4 @@
+
 import pandas as pd
 from typing import Any
 from loguru import logger
@@ -50,3 +51,46 @@ async def execute_query(
     finally:
         await engine.dispose()
     return df
+
+
+async def execute_initial_query(
+    query: str,
+    db_url: str,
+    params: dict | None = None,
+    raise_on_error: bool = False,
+) -> None:
+    """Execute DDL/DML query without fetching results.
+
+    Intended for initialization scripts (CREATE, DROP, INDEX).
+
+    Args:
+        query (str): SQL query string.
+        db_url (str): Database URL.
+        params (dict | None): Optional parameters.
+        raise_on_error (bool): Raise exception on execution error.
+    """
+    if not isinstance(query, str) or not query.strip():
+        message = 'Query must be a non-empty string.'
+        logger.error(message)
+        if raise_on_error:
+            raise ValueError(message)
+        return
+
+    engine = create_async_engine_instance(db_url)
+
+    try:
+        async with engine.begin() as connection:
+            await connection.execute(
+                text(query),
+                params or {},
+            )
+
+        logger.info('Initial query executed successfully.')
+
+    except Exception as error:
+        logger.error(f'Error executing initial query: {error}')
+        if raise_on_error:
+            raise
+
+    finally:
+        await engine.dispose()

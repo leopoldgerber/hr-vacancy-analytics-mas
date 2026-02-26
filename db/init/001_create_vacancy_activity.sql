@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS vacancy_activity;
 CREATE TABLE IF NOT EXISTS vacancy_activity (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
