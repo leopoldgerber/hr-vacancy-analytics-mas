@@ -3,7 +3,7 @@ from loguru import logger
 # from datetime import datetime, timedelta
 
 from db.scripts.credentials import DB_URL
-from db.scripts.connection import execute_query
+from db.scripts.connection import execute_query_return_df
 
 
 print(DB_URL['vacancy-postgres'])

@@ -5,7 +5,19 @@ This README provides a comprehensive description of the database structure, incl
 
 The database stores information related to clients, geographic references (countries, regions, cities), analytical entities (profiles), and vacancy activity data collected from job platforms. It is designed to support multi-tenant data isolation, geographic normalization, lifecycle tracking, and analytical processing.
 
+
+## Table of Contents
+
+- [vacancy_activity](#vacancy_activity)
+- [cities](#cities)
+- [clients](#clients)
+- [countries](#countries)
+- [profiles](#profiles)
+- [regions](#regions)
+- [vacancies](#vacancies)
+
 ## Tables and Fields Description
+
 ### vacancy_activity
 
 `vacancy_activity` - Vacancy activity table
@@ -157,7 +169,7 @@ Company or client name.
 `slug` (VARCHAR(100))
 Human-readable unique identifier used in URLs.
 
-`status_id` (INTEGER)
+`is_active` (INTEGER)
 Reference to client status (`FK -> client_statuses.id`).
 
 `country_id` (INTEGER)

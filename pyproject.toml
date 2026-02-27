@@ -25,4 +25,4 @@ where = ['.']
 include = ['db*']
 
 [tool.setuptools.package-data]
-db = ['init/*.sql']
+db = ['create/*.sql', 'insert/*.sql']

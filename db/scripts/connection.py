@@ -1,4 +1,3 @@
-
 import pandas as pd
 from typing import Any
 from loguru import logger
@@ -24,6 +23,44 @@ async def check_async_connection(engine: AsyncEngine) -> Any:
 
 
 async def execute_query(
+    statements: list[str],
+    db_url: str,
+    raise_on_error: bool = False,
+) -> int:
+    """Execute multiple SQL statements in a single transaction.
+    Args:
+        statements (list[str]): List of SQL statements to execute.
+        db_url (str): Database URL.
+        raise_on_error (bool): Raise exception on execution error."""
+    if not isinstance(statements, list) or not statements:
+        logger.error('Statements must be a non-empty list.')
+        return 0
+
+    engine = create_async_engine_instance(db_url)
+    executed_count = 0
+
+    try:
+        async with engine.begin() as connection:
+            for statement in statements:
+                if not isinstance(statement, str) or not statement.strip():
+                    continue
+                await connection.execute(text(statement))
+                executed_count += 1
+
+        logger.info(f'Executed statements: {executed_count}')
+        return executed_count
+
+    except Exception as error:
+        logger.error(f'Error executing SQL statements: {error}')
+        if raise_on_error:
+            raise
+        return executed_count
+
+    finally:
+        await engine.dispose()
+
+
+async def execute_query_return_df(
     query: str,
     db_url: str,
     params: dict[str, Any] | None = None,
@@ -51,46 +88,3 @@ async def execute_query(
     finally:
         await engine.dispose()
     return df
-
-
-async def execute_initial_query(
-    query: str,
-    db_url: str,
-    params: dict | None = None,
-    raise_on_error: bool = False,
-) -> None:
-    """Execute DDL/DML query without fetching results.
-
-    Intended for initialization scripts (CREATE, DROP, INDEX).
-
-    Args:
-        query (str): SQL query string.
-        db_url (str): Database URL.
-        params (dict | None): Optional parameters.
-        raise_on_error (bool): Raise exception on execution error.
-    """
-    if not isinstance(query, str) or not query.strip():
-        message = 'Query must be a non-empty string.'
-        logger.error(message)
-        if raise_on_error:
-            raise ValueError(message)
-        return
-
-    engine = create_async_engine_instance(db_url)
-
-    try:
-        async with engine.begin() as connection:
-            await connection.execute(
-                text(query),
-                params or {},
-            )
-
-        logger.info('Initial query executed successfully.')
-
-    except Exception as error:
-        logger.error(f'Error executing initial query: {error}')
-        if raise_on_error:
-            raise
-
-    finally:
-        await engine.dispose()
