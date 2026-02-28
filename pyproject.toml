@@ -1,28 +1,32 @@
 [build-system]
-requires = ['setuptools>=68.0', 'wheel']
-build-backend = 'setuptools.build_meta'
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = 'hr-vacancy-analytics-db'
-version = '0.1.0'
-description = 'Database utilities and SQL init scripts for HR vacancy analytics project'
-readme = 'README.md'
-requires-python = '>=3.10'
+name = "hr-vacancy-analytics"
+version = "0.1.0"
+description = "HR vacancy analytics service (API + agent + db utilities)"
+readme = "README.md"
+requires-python = ">=3.10"
 dependencies = [
-  'pandas>=2.0',
-  'sqlalchemy>=2.0',
-  'asyncpg>=0.28',
-  'python-dotenv>=1.0',
-  'loguru>=0.7',
-  'numpy>=1.24'
+  "pandas>=2.0",
+  "sqlalchemy>=2.0",
+  "asyncpg>=0.28",
+  "python-dotenv>=1.0",
+  "loguru>=0.7",
+  "numpy>=1.24",
+
+  # API
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27"
 ]
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ['.']
-include = ['db*']
+where = ["src"]
+include = ["hr_vacancy_analytics*"]
 
 [tool.setuptools.package-data]
-db = ['create/*.sql', 'insert/*.sql']
+hr_vacancy_analytics = ["db/create/*.sql", "db/insert/*.sql"]

@@ -2,8 +2,8 @@
 from loguru import logger
 # from datetime import datetime, timedelta
 
-from db.scripts.credentials import DB_URL
-from db.scripts.connection import execute_query_return_df
+from hr_vacancy_analytics.db.scripts.credentials import DB_URL
+from hr_vacancy_analytics.db.scripts.connection import execute_query_return_df
 
 
 print(DB_URL['vacancy-postgres'])
@@ -16,7 +16,7 @@ async def test_db_connection() -> bool:
     query = 'SELECT 1 AS healthcheck'
 
     try:
-        df = await execute_query(
+        df = await execute_query_return_df(
             query=query,
             db_url=DB_URL['vacancy-postgres'])
 

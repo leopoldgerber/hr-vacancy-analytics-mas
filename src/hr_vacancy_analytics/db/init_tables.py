@@ -3,14 +3,15 @@ import sqlparse
 from loguru import logger
 from importlib import resources
 
-from db.scripts.credentials import DB_URL
-from db.scripts.connection import execute_query
+from hr_vacancy_analytics.db.scripts.credentials import DB_URL
+from hr_vacancy_analytics.db.scripts.connection import execute_query
 
 
 def load_sql_file(dir_name: str, file_name: str) -> str:
     """Load SQL file content from a package directory.
     Args:
-        dir_name (str): Package-like directory path (e.g. 'db/create').
+        dir_name (str): Package-like directory path
+        (e.g. 'hr_vacancy_analytics/db/create').
         file_name (str): SQL file name."""
     dir_name = dir_name.replace('/', '.')
 
@@ -68,8 +69,8 @@ async def run_init_script() -> list[int]:
     Args:
         None."""
     dir_list = [
-        'db/create',
-        'db/insert'
+        'hr_vacancy_analytics/db/create',
+        'hr_vacancy_analytics/db/insert'
     ]
     file_list = [
         '001_create_vacancy_activity.sql',
